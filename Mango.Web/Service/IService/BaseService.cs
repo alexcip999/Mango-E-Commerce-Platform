@@ -35,7 +35,7 @@ namespace Mango.Web.Service.IService
                 switch (requestDto.ApiType)
                 {
                     case ApiType.POST:
-                        message.Method = HttpMethod.Get;
+                        message.Method = HttpMethod.Post;
                         break;
                     case ApiType.PUT:
                         message.Method = HttpMethod.Put;
