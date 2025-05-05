@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using Mango.MessageBus;
 using Mango.Services.OrderAPI.Service.IService;
 using Mango.Services.OrderAPI.Service;
+using Stripe;
+using ProductService = Mango.Services.OrderAPI.Service.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +70,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
