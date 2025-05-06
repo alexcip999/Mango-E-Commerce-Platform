@@ -20,17 +20,31 @@ namespace Mango.Web.Controllers
             return View();
         }
 
+        public IActionResult OrderIndex()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
             IEnumerable<OrderHeaderDto> list;
             string userId = "";
+
+            // Check if the user is not an admin
             if (!User.IsInRole(SD.RoleAdmin))
             {
                 userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
 
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Json(new { data = new List<OrderHeaderDto>(), message = "User ID not found in claims." });
+                }
             }
+
+            // Call the service to get orders
             ResponseDto response = _orderService.GetAllOrder(userId).GetAwaiter().GetResult();
+
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(Convert.ToString(response.Result));
@@ -39,7 +53,9 @@ namespace Mango.Web.Controllers
             {
                 list = new List<OrderHeaderDto>();
             }
-                return Json(new { data = list });
+
+            return Json(new { data = list });
         }
+
     }
 }
