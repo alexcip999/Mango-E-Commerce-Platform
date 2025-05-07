@@ -76,7 +76,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
-
             return _response;
         }
 
